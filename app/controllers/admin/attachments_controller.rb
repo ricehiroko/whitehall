@@ -145,7 +145,10 @@ private
   end
 
   def attachable
-    @attachable ||= attachable_class.find(attachable_id)
+    @attachable ||= begin
+      scope = attachable_class.respond_to?(:friendly) ? attachable_class.friendly : attachable_class
+      scope.find(attachable_id)
+    end
   end
   helper_method :attachable
 
